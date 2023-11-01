@@ -1,2 +1,2 @@
 # rio-de.github.io
-_config.yml
+# _config.yml
