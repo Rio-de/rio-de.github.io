@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "PAGE-TITLE"
-permalink: /https://rio-de.github.io/
+permalink: /my-web-page/
 ---
 
 <!DOCTYPE html>
