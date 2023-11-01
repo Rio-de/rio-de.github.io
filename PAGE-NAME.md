@@ -1,6 +1,8 @@
+---
 layout: page
 title: "PAGE-TITLE"
-permalink: /[URL-PATH](https://rio-de.github.io/)https://rio-de.github.io/
+permalink: /https://rio-de.github.io/
+---
 
 <!DOCTYPE html>
 <html lang="en">
