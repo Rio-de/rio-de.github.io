@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>入力内容の保存</title>
+</head>
+<body>
+  <input type="text" id="inputField">
+  <button onclick="saveInput()">保存</button>
+  <button onclick="loadInput()">読み込む</button>
+
+  <script>
+    function saveInput() {
+      const inputField = document.getElementById("inputField");
+      const inputValue = inputField.value;
+      localStorage.setItem("savedInput", inputValue);
+    }
+
+    function loadInput() {
+      const inputField = document.getElementById("inputField");
+      const savedInput = localStorage.getItem("savedInput");
+      if (savedInput) {
+        inputField.value = savedInput;
+      }
+    }
+  </script>
+</body>
+</html>
