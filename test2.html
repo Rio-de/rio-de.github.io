@@ -74,15 +74,20 @@
 
     <script>
         function saveMemo() {
-            var memoInput = document.getElementById('memoInput').value;
-            
+            var memoInput = document.getElementById('memoInput').innerHTML;
             var scriptUrl = 'https://script.google.com/macros/s/AKfycby7j3if3DNFBUR6fcdUYNGMxnD777TSMfI260WbTws3jCTAW1qCuOCd4p3J0nflSkTT/exec';
-
-            // スクリプトにデータを送信
-            var url = scriptUrl + '?action=save&text=' + encodeURIComponent(memoInput);
-            fetch(url)
-                .then(response => response.text())
-                .then(data => console.log(data));
+        
+            // メモの内容をオブジェクトとして送信
+            fetch(scriptUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ action: 'save', text: memoInput }),
+            })
+            .then(response => response.text())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
         }
 
         function loadMemo() {
