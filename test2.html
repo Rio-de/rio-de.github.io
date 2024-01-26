@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スタイリッシュなメモ</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .memo-container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .memo-header {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .memo-content {
+            padding: 20px;
+        }
+
+        .memo-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .memo-buttons {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .memo-buttons button {
+            padding: 8px 16px;
+            margin: 0 5px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="memo-container">
+        <div class="memo-header">
+            <h2>メモ</h2>
+        </div>
+        <div class="memo-content" id="memoContent" id="memoInput" contenteditable="true"></div>
+        <div class="memo-buttons">
+            <button onclick="saveMemo()">保存</button>
+            <button onclick="loadMemo()">読み込み</button>
+        </div>
+        <div id="memoContent"></div>
+    </div>
+
+    <script>
+        function saveMemo() {
+            var memoContent = document.getElementById('memoContent').innerHTML;
+            var memoInput = document.getElementById('memoInput').value;
+            
+            var scriptUrl = 'https://script.google.com/macros/s/AKfycbxVpIA6m5QtqQQNztlbNv0XmZXv2hmzricv76zjoYDUfzDGO00EWt2gB2FunHGQf4g4/exec';
+
+            // スクリプトにデータを送信
+            var url = scriptUrl + '?action=save&text=' + encodeURIComponent(memoInput);
+            fetch(url)
+                .then(response => response.text())
+                .then(data => console.log(data));
+        }
+
+        function loadMemo() {
+            var scriptUrl = 'https://script.google.com/macros/s/AKfycbxVpIA6m5QtqQQNztlbNv0XmZXv2hmzricv76zjoYDUfzDGO00EWt2gB2FunHGQf4g4/exec';
+
+            // スクリプトからデータを取得
+            var url = scriptUrl + '?action=load';
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('memoContent').innerText = data;
+                });
+        }
+    </script>
+</body>
+</html>
