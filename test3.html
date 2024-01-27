@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #222;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        #timer-container {
+            flex: 1;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            margin: 20px;
+        }
+
+        #timer {
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .task-time {
+    font-size: 50px;
+    font-family: Calibri, sans-serif;
+    margin-bottom: 10px;
+}
+
+
+        #end-time {
+            font-size: 18px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        #progress-bar-container {
+            height: 10px;
+            background-color: #444;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0;
+            background-color: #ee7800;
+            transition: width 1s linear;
+        }
+
+        #tasks-container {
+            margin-top: 20px;
+        }
+
+        #tasks {
+            display: flex;
+            flex-direction: column;
+            background-color: #333;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        label {
+            margin-bottom: 10px;
+        }
+
+        input {
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            background-color: #444;
+            color: #fff;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .task-item {
+            margin-bottom: 5px;
+            background-color: #555;
+            padding: 8px;
+            border-radius: 5px;
+        }
+    </style>
+    <title>タイマーとタスク</title>
+</head>
+<body>
+    <div id="timer-container">
+        <div id="timer">
+            <div id="task-time-placeholder" class="task-time"></div>
+            <div id="end-time"></div>
+            <div id="progress-bar-container">
+                <div id="progress-bar"></div>
+            </div>
+        </div>
+
+        <div id="tasks-container">
+            <div id="tasks">
+                <label for="date-input">
+                    <input type="date" id="date-input">
+                </label>
+                <label for="timer-input">-
+                    <input type="text" id="timer-input" placeholder="時刻を入力（24時間形式）">
+                </label>
+                <ul id="task-list-placeholder" class="task-list">
+                    <li class="task-item">タスク1</li>
+                    <li class="task-item">タスク2</li>
+                    <!-- 追加のタスクをここに追加 -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateTaskTime() {
+            var dateInput = document.getElementById("date-input");
+            var timerInput = document.getElementById("timer-input");
+            var taskTimePlaceholder = document.getElementById("task-time-placeholder");
+            var taskListPlaceholder = document.getElementById("task-list-placeholder");
+            var endTimePlaceholder = document.getElementById("end-time");
+            var progressBar = document.getElementById("progress-bar");
+
+            // 入力された日付と時刻を取得
+            var selectedDate = new Date(dateInput.value);
+            var timerValue = timerInput.value;
+
+            // 日付と時刻を組み合わせて目標時刻を取得
+            var targetTime = new Date(selectedDate.toDateString() + " " + timerValue);
+
+            // 残り時間と総時間の計算
+            var remainingTime = calculateRemainingTime(targetTime);
+            var totalTime = calculateTotalTime(targetTime);
+
+            // 表示更新
+            taskTimePlaceholder.textContent = formatTime(remainingTime.hours) + ":" + formatTime(remainingTime.minutes) + ":" + formatTime(remainingTime.seconds);
+            taskListPlaceholder.innerHTML = "<li class='task-item'>タスク1</li><li class='task-item'>タスク2</li>";
+
+            // 終了予定時刻の表示
+            var endDateTime = new Date(targetTime);
+            endTimePlaceholder.textContent = formatTime(endDateTime.getHours()) + ":" + formatTime(endDateTime.getMinutes()) + ":" + formatTime(endDateTime.getSeconds());
+
+            // シークバーの制御
+            var currentTime = new Date();
+            var elapsedTime = totalTime - remainingTime.hours * 3600 * 1000 - remainingTime.minutes * 60 * 1000 - remainingTime.seconds * 1000;
+            var progressPercentage = (elapsedTime / totalTime) * 100;
+            progressBar.style.width = progressPercentage + "%";
+
+            // タイマーの時間に応じて再度呼び出す
+            setTimeout(updateTaskTime, 1000);
+        }
+
+        function calculateRemainingTime(targetTime) {
+            var currentTime = new Date();
+
+            var timeDiff = Math.abs(targetTime - currentTime) / 1000; // in seconds
+            var hours = Math.floor(timeDiff / 3600);
+            var minutes = Math.floor((timeDiff % 3600) / 60);
+            var seconds = Math.floor(timeDiff % 60);
+
+            return { hours: hours, minutes: minutes, seconds: seconds };
+        }
+
+        function calculateTotalTime(targetTime) {
+            var lastUpdateTime = new Date(); // You may need to replace this with the actual last update time
+            var timeDiff = Math.abs(targetTime - lastUpdateTime) / 1000; // in seconds
+            var hours = Math.floor(timeDiff / 3600);
+            var minutes = Math.floor((timeDiff % 3600) / 60);
+            var seconds = Math.floor(timeDiff % 60);
+
+            return { hours: hours, minutes: minutes, seconds: seconds };
+        }
+
+        function formatTime(time) {
+            return time < 10 ? "0" + time : time;
+        }
+
+        // 初回呼び出し
+        updateTaskTime();
+    </script>
+</body>
+</html>
